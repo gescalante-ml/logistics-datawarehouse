@@ -12,7 +12,5 @@ if __name__ == '__main__':
                 headers = row
                 continue
             batch.append(row)
-            if i > 500:
-                break
 
     load.start(headers, batch)
