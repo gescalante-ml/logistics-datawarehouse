@@ -1,19 +1,23 @@
 from ..data import equipment_type, sourcing_channel
+from ..utils import load_datestring
 
 
 def equipment_type_dimension(truck_run):
+    """Transforms raw equipment type in a dimensional key"""
     truck_run['equipment_type_key'] = equipment_type.get(truck_run['equipment_type'], 1)
     del truck_run['equipment_type']
     return truck_run
 
 
 def sourcing_channel_dimension(truck_run):
-    truck_run['sourcing_channel_key'] = equipment_type.get(truck_run['sourcing_channel'], 1)
+    """Transforms raw sourcing channel type in a dimensional key"""
+    truck_run['sourcing_channel_key'] = sourcing_channel.get(truck_run['sourcing_channel'], 1)
     del truck_run['sourcing_channel']
     return truck_run
 
 
 def load_dimension(truck_run):
+    """Transforms raw load informations in a junk dimensional model to insert as needed"""
     indicators = ['contracted_load', 'load_was_cancelled', 'load_booked_autonomously', 'load_sourced_autonomously']
     load_dimension_ = {}
     load_dimension_['contracted_indicator'] = 'Contracted' if truck_run['contracted_load'] == 'TRUE' else 'Not Contracted'
@@ -29,6 +33,7 @@ def load_dimension(truck_run):
 
 
 def on_time_dimension(truck_run):
+    """Transforms raw carrier_on_time informations in a junk dimensional model to insert as needed"""
     indicators = ['carrier_on_time_to_pickup', 'carrier_on_time_to_delivery', 'carrier_on_time_overall']
     on_time = {}
     on_time['pickup_indicator'] = (
@@ -52,6 +57,7 @@ def on_time_dimension(truck_run):
 
 
 def location_dimension(truck_run):
+    """Transforms raw lane information in origin/destination"""
     origin, destination = truck_run['lane'].split(' -> ')
 
     truck_run['origin'] = origin
@@ -62,7 +68,7 @@ def location_dimension(truck_run):
 
 
 def carrier_dimension(truck_run):
-
+    """Transforms raw carrier information in carrier dimensional model"""
     carrier = {
         'carrier_name': truck_run['carrier_name'],
         'vip_indicator': 'VIP' if truck_run['vip_carrier'] == 'TRUE' else 'Not VIP',
@@ -80,6 +86,7 @@ def carrier_dimension(truck_run):
 
 
 def tracking_dimension(truck_run):
+    """Transforms raw tracking information in junk dimensional model to insert as needed"""
     indicators = ['has_mobile_app_tracking', 'has_macropoint_tracking', 'has_edi_tracking']
     tracking = {}
     tracking['mobile_app_indicator'] = (
@@ -101,3 +108,17 @@ def tracking_dimension(truck_run):
 
     return truck_run
 
+
+def time_dimensions(truck_run):
+    """Loads all time dimensions"""
+    truck_run.update(load_datestring(truck_run['book_date'], 'book_'))
+    truck_run.update(load_datestring(truck_run['quote_date'], 'quote_'))
+    truck_run.update(load_datestring(truck_run['source_date'], 'source_'))
+
+    truck_run.update(load_datestring(truck_run['delivery_appointment_time'], 'delivery_appointment_'))
+    truck_run.update(load_datestring(truck_run['delivery_date'], 'delivery_'))
+
+    truck_run.update(load_datestring(truck_run['pickup_appointment_time'], 'pickup_appointment_'))
+    truck_run.update(load_datestring(truck_run['pickup_date'], 'pickup_'))
+
+    return truck_run

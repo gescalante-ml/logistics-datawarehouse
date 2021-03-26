@@ -26,6 +26,7 @@ def transform(truck_run):
     truck_run = dimension.carrier_dimension(truck_run)
     truck_run = dimension.on_time_dimension(truck_run)
     truck_run = dimension.tracking_dimension(truck_run)
+    truck_run = dimension.time_dimensions(truck_run)
 
     return truck_run
 
