@@ -25,7 +25,7 @@ def load_dimension(truck_run):
     load_dimension_['booked_indicator'] = 'Booked Autonomously' if truck_run['load_booked_autonomously'] == 'TRUE' else 'Not Booked Autonomously'
     load_dimension_['sourced_indicator'] = 'Sourced Autonomously' if truck_run['load_sourced_autonomously'] == 'TRUE' else 'Not Sourced Autonomously'
 
-    truck_run['load_dimension_key'] = load_dimension_
+    truck_run['load_key'] = load_dimension_
     for indicator in indicators:
         del truck_run[indicator]
 
@@ -80,7 +80,7 @@ def carrier_dimension(truck_run):
     del truck_run['vip_carrier']
     del truck_run['carrier_rating']
     del truck_run['carrier_dropped_us_count']
-    truck_run['carrier'] = carrier
+    truck_run['carrier_key'] = carrier
 
     return truck_run
 
