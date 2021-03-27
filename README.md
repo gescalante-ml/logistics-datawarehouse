@@ -4,8 +4,10 @@ The result is a self-service data-analysis to slice and dice freely combining di
 A visualization of the data can be found in this dashboard: https://public.tableau.com/profile/gabriel3199#!/vizhome/logistics-datawarehouse/Dashboard1
 
 
-1 - [Get started](#Get Started) <br>
-2 - [The model](#The model) <br>
+1 - [Get started](#Get Started)
+
+2 - [The model](#The model)
+
 3 - [Visualizing](#Visualizing)
 
 ## Get Started
