@@ -92,20 +92,19 @@ def get_load_ids(loads, insert_new=False):
     columns = [
         'load_key',
         'contracted_indicator',
+        'cancelled_indicator',
         'booked_indicator',
-        'sourced_indicator',
-        'cancelled_indicator'
+        'sourced_indicator'
     ]
 
-    query = f"""SELECT load_key, contracted_indicator, booked_indicator, sourced_indicator, cancelled_indicator FROM load_d"""
+    query = f"""SELECT load_key, contracted_indicator, cancelled_indicator, booked_indicator, sourced_indicator FROM load_d"""
     mycursor.execute(query)
     rows = mycursor.fetchall()
     lines = []
     for row in rows:
         load = dict(zip(columns, row))
 
-        load_id = ''.join([str(value) for key, value in load.items() if key != 'load_key'])
-
+        load_id = ''.join([str(load[field]) for field in columns if field != 'load_key'])
         if load_id in loads:
             loads[load_id]['load_key'] = load['load_key']
 
@@ -114,9 +113,9 @@ def get_load_ids(loads, insert_new=False):
 
     for key, load in loads.items():
         if 'load_key' not in load:
-            lines.append(tuple([value for k, value in load.items()]))
+            lines.append(tuple([load[field] for field in columns[1:]]))
 
-    insert_sql = f"INSERT INTO load_d(contracted_indicator, booked_indicator, sourced_indicator, cancelled_indicator) VALUES (%s, %s, %s, %s)"
+    insert_sql = f"INSERT INTO load_d(contracted_indicator, cancelled_indicator, booked_indicator, sourced_indicator) VALUES (%s, %s, %s, %s)"
 
     if len(lines) > 0:
         mycursor.executemany(insert_sql, lines)
@@ -167,42 +166,37 @@ def get_tracking_ids(trackings, insert_new=False):
     return get_tracking_ids(trackings)
 
 
-def get_city_ids(cities, insert_new=False):
-
+def get_lane_ids(lanes, insert_new=False):
     columns = [
-        'location_key',
-        'full_city',
-        'city',
-        'state'
+        'lane_key',
+        'origin_city',
+        'origin_state',
+        'origin_country',
+        'mileage',
+        'destination_city',
+        'destination_state',
+        'destination_country',
+        'city_pair'
     ]
 
-    cities_name = tuple([city for city in cities])
-    query = f"""SELECT location_key, full_city, city, state FROM location_d WHERE
-    full_city in {cities_name}
-    """
+    query = f"""SELECT lane_key, origin_city, origin_state, origin_country, mileage, destination_city, destination_state, destination_country, city_pair FROM lane_d"""
     mycursor.execute(query)
     rows = mycursor.fetchall()
     lines = []
-    cities_mapping = {}
-
     for row in rows:
-        city = dict(zip(columns, row))
-
-        city_id = city['full_city']
-
-        if city_id in cities:
-            cities_mapping[city_id] = city
+        lane = dict(zip(columns, row))
+        lane_id = ''.join([str(value) for key, value in lane.items() if key != 'lane_key'])
+        if lane_id in lanes:
+            lanes[lane_id]['lane_key'] = lane['lane_key']
 
     if not insert_new:
-        return cities_mapping
+        return lanes
 
-    for city in cities:
-        if city not in cities_mapping:
-            full_city = city
-            city, state = city.split(',')
-            lines.append(tuple([full_city, city, state]))
+    for key, lane in lanes.items():
+        if 'lane_key' not in lane:
+            lines.append(tuple([lane[field] for field in columns[1:]]))
 
-    insert_sql = f"INSERT INTO location_d(`full_city`, `city`, `state`) VALUES (%s, %s, %s)"
+    insert_sql = f"INSERT INTO lane_d(origin_city, origin_state, origin_country, mileage, destination_city, destination_state, destination_country, city_pair) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
 
     if len(lines) > 0:
         mycursor.executemany(insert_sql, lines)
@@ -211,7 +205,7 @@ def get_city_ids(cities, insert_new=False):
     else:
         print('Nothing new')
 
-    return get_city_ids(cities)
+    return get_lane_ids(lanes)
 
 
 def get_shipper_ids(shippers, insert_new=False):
@@ -246,8 +240,6 @@ def get_shipper_ids(shippers, insert_new=False):
             lines.append((shipper,))
 
     insert_sql = f"INSERT INTO shipper_d (shipper_name) VALUES (%s)"
-    print(insert_sql)
-    print(lines)
 
     if len(lines) > 0:
         mycursor.executemany(insert_sql, lines)
@@ -275,12 +267,10 @@ def insert_facts(facts):
         'delivery_appointment_time',
         'delivery_date',
         'delivery_time',
-        'origin_location_key',
-        'destination_location_key',
+        'lane_key',
         'book_price',
         'source_price',
         'profit_and_loss',
-        'mileage',
         'shipper_key',
         'carrier_key',
         'on_time_key',
@@ -291,7 +281,7 @@ def insert_facts(facts):
     ]
     s = ['%s'] * len(columns)
     insert_sql = f"INSERT INTO truck_run_f({', '.join(columns)}) VALUES ({', '.join(s)})"
-    print(insert_sql)
+
     lines = []
     for fact in facts:
         lines.append(tuple([fact[field] for field in columns]))

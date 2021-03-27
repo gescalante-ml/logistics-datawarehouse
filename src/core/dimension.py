@@ -56,13 +56,24 @@ def on_time_dimension(truck_run):
     return truck_run
 
 
-def location_dimension(truck_run):
-    """Transforms raw lane information in origin/destination"""
+def lane_dimension(truck_run):
+    """Transforms raw lane information in lane dimension"""
+    lane = {}
     origin, destination = truck_run['lane'].split(' -> ')
+    origin = origin.split(',')
+    destination = destination.split(',')
+    lane['origin_city'], lane['origin_state'] = origin
+    lane['origin_country'] = 'USA'
+    lane['mileage'] = float(truck_run['mileage'])
+    lane['destination_city'], lane['destination_state'] = destination
+    lane['destination_country'] = 'USA'
+    lane['city_pair'] = f"{lane['origin_city']}, {lane['origin_state']} -> {lane['destination_city']}, {lane['destination_state']}"
 
-    truck_run['origin'] = origin
-    truck_run['destination'] = destination
-    del truck_run['lane']
+    truck_run['lane_key'] = lane
+
+    raw_fields = ['lane', 'mileage']
+    for field in raw_fields:
+        del truck_run[field]
 
     return truck_run
 
@@ -122,3 +133,4 @@ def time_dimensions(truck_run):
     truck_run.update(load_datestring(truck_run['pickup_date'], 'pickup_'))
 
     return truck_run
+

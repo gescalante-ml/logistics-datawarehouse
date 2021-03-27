@@ -1,4 +1,4 @@
--- Credit to http://www.dwhworld.com/2010/08/date-dimension-sql-scripts-mysql/
+--- Credit to http://www.dwhworld.com/2010/08/date-dimension-sql-scripts-mysql/
 -- Small-numbers table
 DROP TABLE IF EXISTS numbers_small;
 CREATE TABLE numbers_small (number INT);

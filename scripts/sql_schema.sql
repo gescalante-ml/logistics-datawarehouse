@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS  truck_run_f;
 DROP TABLE IF EXISTS shipper_d;
 DROP TABLE IF EXISTS  carrier_d;
-DROP TABLE IF EXISTS  location_d;
+DROP TABLE IF EXISTS  lane_d;
 DROP TABLE IF EXISTS  on_time_d;
 DROP TABLE IF EXISTS  sourcing_channel_d;
 DROP TABLE IF EXISTS  equipment_type_d;
@@ -22,11 +22,16 @@ CREATE TABLE carrier_d (
     carrier_dropped smallint
 );
 
-CREATE TABLE location_d (
-    location_key int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    full_city varchar(255) NOT NULL,
-    city varchar(255) NOT NULL,
-    state varchar(255) NOT NULL
+CREATE TABLE lane_d (
+    lane_key int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    origin_city varchar(255) NOT NULL,
+    origin_state varchar(255) NOT NULL,
+    origin_country varchar(255) NOT NULL,
+    mileage float not null,
+    destination_city varchar(255) NOT NULL,
+    destination_state varchar(255) NOT NULL,
+    destination_country varchar(255) NOT NULL,
+    city_pair varchar(255) NOT NULL
 );
 
 CREATE TABLE on_time_d (
@@ -90,14 +95,11 @@ CREATE TABLE truck_run_f (
     FOREIGN KEY (delivery_date) REFERENCES date_d(date_key),
     delivery_time int not null,
     FOREIGN KEY (delivery_time) REFERENCES time_d(time_key),
-    origin_location_key int not null,
-    destination_location_key int not null,
-    FOREIGN KEY (origin_location_key) REFERENCES location_d(location_key),
-    FOREIGN KEY (destination_location_key) REFERENCES location_d(location_key),
+    lane_key int not null,
+    FOREIGN KEY (lane_key) REFERENCES lane_d(lane_key),
     book_price float not null,
     source_price float not null,
     profit_and_loss float not null,
-    mileage float not null,
     shipper_key int NOT NULL,
     carrier_key int NOT NULL,
     on_time_key int NOT NULL,
