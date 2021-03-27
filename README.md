@@ -10,6 +10,8 @@ A visualization of the data can be found in this dashboard: https://public.table
 
 3 - [Visualizing](#Visualizing)
 
+4 - [Automation and the cloud](#Automation)
+
 ## Get Started
 First you should have a MySQL instance and python 3.8+. <br>
 Then, the easiest way to run the project is: <br>
@@ -67,3 +69,10 @@ filter by delays, equipment type and source channel. <br>
 Filtering the date we can know: if we see more blues we are getting the most profitable runs.
 The model is very versatile and can be combined/visualized in different ways to get more insights. There are numerous possibilities.
  
+## Automation
+![alt text](./img/cloud.png)
+
+We can automate this process in a production environment tweaking the data source to put in S3, which triggers lambda to run this script.
+The only alteration needed would be to create a handler to download the data from S3 and call src/core/load.py with it. Using
+Redshift is optional but it's nice to automate via IaC the environment. <br>
+We can also instead of triggering lambda in every new put on S3, use CloudWatch Events to bulk load everyday or week.
