@@ -1,10 +1,11 @@
+import os
 import mysql.connector
 
 mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="password",
-    database="logistics"
+    host=os.environ['DWH_HOST'],
+    user=os.environ['DWH_USER'],
+    password=os.environ['DWH_PASSWORD'],
+    database=os.environ['DWH_DATABASE']
 )
 
 mycursor = mydb.cursor()
