@@ -8,7 +8,7 @@ A visualization of the data can be found in this dashboard: https://public.table
 2 - [The model](#The model) <br>
 3 - [Visualizing](#Visualizing)
 
-#Get Started
+## Get Started
 First you should have a MySQL instance and python 3.8+. <br>
 Then, the easiest way to run the project is: <br>
 1 - Clone the repository and cd onto it <br>
@@ -37,7 +37,7 @@ ORDER BY delays DESC
 ``` 
 The above query gets the most delayed to delivery routes.
   
-#The model
+## The model
 ![alt text](./img/diagram.png)
 The idea of the model is to model the process of contracting a truck to carry your shipment. We want to be able to analyze at the level of individual events.
 It's meant to be a simple star schema to model the fact `truck_run`. The measures are the
@@ -54,7 +54,7 @@ The tracking, for example, has only one possible combination, which is all False
 
 Using this modeling we can get valuable information about how the metrics change slicing and dicing as many dimension we may want.
 
-#Visualizing
+## Visualizing
 The below dashboard can be fulled analyzed interactively at: https://public.tableau.com/profile/gabriel3199#!/vizhome/logistics-datawarehouse/Dashboard1 
 ![alt text](./img/dashboard.png)
 The scatter in the middle changes its color based on the profit, and its size on the mileage. <br> The points in
