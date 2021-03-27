@@ -4,9 +4,9 @@ The result is a self-service data-analysis to slice and dice freely combining di
 A visualization of the data can be found in this dashboard: https://public.tableau.com/profile/gabriel3199#!/vizhome/logistics-datawarehouse/Dashboard1
 
 
-1 - [Get started](#Get Started)
+1 - [Get started](#Get-Started)
 
-2 - [The model](#The model)
+2 - [The model](#The-Model)
 
 3 - [Visualizing](#Visualizing)
 
@@ -39,7 +39,7 @@ ORDER BY delays DESC
 ``` 
 The above query gets the most delayed to delivery routes.
   
-## The model
+## The Model
 ![alt text](./img/diagram.png)
 The idea of the model is to model the process of contracting a truck to carry your shipment. We want to be able to analyze at the level of individual events.
 It's meant to be a simple star schema to model the fact `truck_run`. The measures are the
