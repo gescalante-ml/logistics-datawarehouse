@@ -13,7 +13,7 @@ A visualization of the data can be found in this dashboard: https://public.table
 4 - [Automation and the cloud](#Automation)
 
 ## Get Started
-First, clone this project and cd ont it.
+First, clone this project and cd onto it.
 ### Docker
 Simply run in a CLI tool: (No need to sudo in Windows)
 ```
@@ -22,12 +22,13 @@ sudo docker-compose up --renew-anon-volumes
 ```
 And the data is loaded. <br>
 You can connect to the database using your favorite tool using this information:
-
+```
 host: localhost <br>
 port: 3306 <br>
 database: logistics <br>
 user: root <br>
 password: password<br>
+```
 
 ### Manual
 
