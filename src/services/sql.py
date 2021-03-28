@@ -1,14 +1,32 @@
 import os
+import time
+
 import mysql.connector
 
-mydb = mysql.connector.connect(
-    host=os.environ['DWH_HOST'],
-    user=os.environ['DWH_USER'],
-    password=os.environ['DWH_PASSWORD'],
-    database=os.environ['DWH_DATABASE']
-)
+while True:
+    attempts = 0
+    try:
+        attempts += 1
+        mydb = mysql.connector.connect(
+            host=os.environ['DWH_HOST'],
+            user=os.environ['DWH_USER'],
+            password=os.environ['DWH_PASSWORD'],
+            database=os.environ['DWH_DATABASE']
+        )
+        mycursor = mydb.cursor()
+        tables = [table for table in mycursor.execute('SHOW TABLES;')]
+        print(len(tables))
+        if len(tables) > 12:
+            break
+    except Exception:
+        print('Waiting for database goes up...')
+        time.sleep(2)
 
-mycursor = mydb.cursor()
+    if attempts > 5:
+        raise Exception('Database not avaiable')
+
+
+
 
 
 def get_carriers_ids(carriers, insert_new=False):

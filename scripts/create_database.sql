@@ -1,9 +1,9 @@
-DROP DATABASE logistics IF EXISTS;
-CREATE DATABSE logistics;
+DROP DATABASE IF EXISTS logistics;
+CREATE DATABASE logistics;
 USE logistics;
 
 -- Creating date and time dimensions
---- Credit to http://www.dwhworld.com/2010/08/date-dimension-sql-scripts-mysql/
+-- Credit to http://www.dwhworld.com/2010/08/date-dimension-sql-scripts-mysql/
 -- Small-numbers table
 DROP TABLE IF EXISTS numbers_small;
 CREATE TABLE numbers_small (number INT);
@@ -32,8 +32,6 @@ weekend          CHAR(10) NOT NULL DEFAULT "Weekday",
 day_of_year      INT,
 week_of_year     CHAR(2),
 quarter  INT,
-previous_day     date NOT NULL default '0000-00-00',
-next_day         date NOT NULL default '0000-00-00',
 UNIQUE KEY `date` (`date`));
 
 -- First populate with ids and Date
@@ -55,9 +53,7 @@ day_of_week     = DAYOFWEEK(date),
 weekend         = IF( DATE_FORMAT( date, "%W" ) IN ('Saturday','Sunday'), 'Weekend', 'Weekday'),
 day_of_year     = DATE_FORMAT( date, "%j" ),
 week_of_year    = DATE_FORMAT( date, "%V" ),
-quarter         = QUARTER(date),
-previous_day    = DATE_ADD(date, INTERVAL -1 DAY),
-next_day        = DATE_ADD(date, INTERVAL 1 DAY);
+quarter         = QUARTER(date);
 
 -- credit to Akom's Tech Ruminations
 -- http://tech.akom.net/archives/36-Creating-A-Basic-Date-Dimension-Table-in-MySQL.html

@@ -13,13 +13,30 @@ A visualization of the data can be found in this dashboard: https://public.table
 4 - [Automation and the cloud](#Automation)
 
 ## Get Started
+First, clone this project and cd ont it.
+### Docker
+Simply run in a CLI tool: (No need to sudo in Windows)
+```
+sudo docker build -t logistics-datawarehouse .
+sudo docker-compose up --renew-anon-volumes
+```
+And the data is loaded. <br>
+You can connect to the database using your favorite tool using this information:
+
+host: localhost <br>
+port: 3306 <br>
+database: logistics <br>
+user: root <br>
+password: password<br>
+
+### Manual
+
 First you should have a MySQL instance and python 3.8+. <br>
 Then, the easiest way to run the project is: <br>
-1 - Clone the repository and cd onto it <br>
-2 - Create the database using the script at /scripts/create_database.sql <br>
-3 - Install the requirements using pip <br>
+1 - Create the database using the script at /scripts/create_database.sql <br>
+2 - Install the requirements using pip <br>
     `pip install -r requirements.txt` <br>
-4 - Open a terminal and export the environment variables to access the MySQL instance <br>
+3 - Export the environment variables to access the MySQL instance <br>
 ```
 export DWH_HOST=localhost
 export DWH_USER=root
@@ -30,7 +47,8 @@ They are, respectively, the host, the user and password to access and the databa
 If you're on a Windows CLI, change export to `set`. <br>
 4 - Populate the database <br>
     `python populate.py` <br>
-5 - Happy analysis!
+    
+### Happy analysis!
 ```sql
 SELECT  ld.city_pair, COUNT(*) as delays FROM truck_run_f
 INNER JOIN lane_d ld on truck_run_f.lane_key = ld.lane_key
