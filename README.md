@@ -23,11 +23,11 @@ sudo docker-compose up --renew-anon-volumes
 And the data is loaded. <br>
 You can connect to the database using your favorite tool using this information:
 ```
-host: localhost <br>
-port: 3306 <br>
-database: logistics <br>
-user: root <br>
-password: password<br>
+host: localhost
+port: 3306
+database: logistics
+user: root
+password: password
 ```
 
 ### Manual
