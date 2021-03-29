@@ -9,4 +9,4 @@ ENV DWH_USER=root
 ENV DWH_PASSWORD=password
 
 COPY . .
-CMD ["python", "populate.py"]
+CMD ["python", "-u", "populate.py"]
